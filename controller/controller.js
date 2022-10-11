@@ -4,9 +4,21 @@ const {fetchCategories} = require('../model/model')
 
 
 exports.getCategories = (req, res) => {      //takes category data defined in the model and sends it through
-  console.log('found the controller')
     fetchCategories().then((categories) => {
-      console.log('sending the model info back to the client')
       res.status(200).send({categories});
     });
   };
+
+
+
+
+
+/*
+the controller takes the data outputted from the model
+
+the controller requires the function used to make and order the sql query 
+
+fetchCategories (or any function inside the model required here) is then invoked and chained to a .then with categories
+
+if no errors occur during the given functions invocation, a 200 code will be given, otherwise it won't be reached
+*/

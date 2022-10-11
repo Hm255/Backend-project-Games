@@ -27,3 +27,9 @@ afterAll(() => {
         });
     });
   });
+
+
+
+/*
+beforeEach: this returns the test data from the linked table
+*/
