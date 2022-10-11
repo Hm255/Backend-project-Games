@@ -11,7 +11,7 @@ beforeEach(()=>{
 
 afterAll(() => {
     db.end();
-    console.log('made it to the end')
+    
   });
 
   describe("GET/api/categories", () => {
