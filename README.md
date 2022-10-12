@@ -1,15 +1,18 @@
-# Northcoders House of Games API
+1. you should fork the repository
 
-## Background
+2. then you should clone this respository
 
-We will be building an API for the purpose of accessing application data programmatically. The intention here is to mimic the building of a real world backend service (such as reddit) which should provide this information to the front end architecture.
+3. use npm install to install necessary packages
 
-Your database will be PSQL, and you will interact with it using [node-postgres](https://node-postgres.com/).
+4. you should create 2 .env files for this program (these need to be .gitignored)
+.env.test: this will run a test database so the database can be experiemented with without the danger of losing or altering information in the official database
+.env.dev this will run the official database and all its data
 
-## Kanban
+these 2 .env files will contain the following:
 
-### Link to your Trello Board here: https://trello.com/b/gBtX4GN3/be-nc-games
+PGDATABASE=databasename/databasename_test
 
+<<<<<<< HEAD
 To keep track of the tasks involved in this project we're going to use a kanban board. Ensure that you work on one _ticket_ at time. You can click on the ticket to find out more information about what is required for the feature. A ticket is not considered complete unless both the happy path and errors response are handled. You can make use of the checklist on each ticket to keep track of the errors you want to handle. You can also make use of [error-handling.md](error-handling.md) to consider the error codes we may wish to respond with.
 
 **Please ensure you work through the tickets in numerical order.**
@@ -66,3 +69,6 @@ The [Husky documentation](https://typicode.github.io/husky/#/) explains how to c
 //     })
 //   })
 // })
+=======
+.env files: these files will select which database to use depending on the file chosen (test will run the test db). 
+>>>>>>> 1f24d0befff556c7194ad3c4d7a1f7d3e67075ba
