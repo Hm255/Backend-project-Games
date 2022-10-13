@@ -13,9 +13,6 @@ exports.fetchReviewID = (id) => {
     .then(({rows})=>{
     return rows[0];  
     })
-    .catch((err) => {
-        return Promise.reject(err)
-    })
 }
 
 
