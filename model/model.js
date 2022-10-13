@@ -1,7 +1,6 @@
 const app = require("../app");
 const db = require("../db/connection");
 
-
 exports.fetchCategories = () => {
     return db.query(`SELECT * FROM categories`)//sql
     .then(({ rows }) => {                      //sql return handler
@@ -18,4 +17,9 @@ exports.fetchReviewID = (id) => {
         return Promise.reject(err)
     })
 }
+
+
+
+
+
 

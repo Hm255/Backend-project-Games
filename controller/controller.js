@@ -2,12 +2,13 @@ const express = require('express');
 const {fetchCategories, fetchReviewID} = require('../model/model')
 //handling sql queries and directing them to an output in the controller
 
-
+const app = express();
 
 exports.getCategories = (req, res) => {      //takes category data defined in the model and sends it through
     fetchCategories().then((categories) => {
       res.status(200).send({categories});
     });
+
   };
 
 
@@ -18,7 +19,6 @@ exports.getReviewID = (req, res, next) => {
   res.status(200).send({review})
   })
   .catch((err)=>{
-    console.log(err.code);
     next(err);
   })
-}
+};
