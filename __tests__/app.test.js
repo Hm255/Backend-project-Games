@@ -69,6 +69,79 @@ afterAll(() => {
   });
 
 
+  describe("GET/api/users", () => {
+    it('should return 1 users details as shown', () => {
+      return request (app)
+      .get('/api/users')
+      .expect(200)
+      .then(({body}) => {
+        expect(body.users[0]).toEqual(
+          {
+            username: 'mallionaire',
+            name: 'haz',
+            avatar_url:
+              'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg'
+          }
+        );
+      });
+    
+    })
+
+    it('should return all users details as shown', () => {
+      return request (app)
+      .get('/api/users')
+      .expect(200)
+      .then(({body}) => {
+        expect(body.users).toEqual([
+          {
+            username: 'mallionaire',
+            name: 'haz',
+            avatar_url:
+              'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg'
+          }
+          ,
+          {
+            username: 'philippaclaire9',
+            name: 'philippa',
+            avatar_url: 'https://avatars2.githubusercontent.com/u/24604688?s=460&v=4'
+          }
+          ,
+          {
+            username: 'bainesface',
+            name: 'sarah',
+            avatar_url: 'https://avatars2.githubusercontent.com/u/24394918?s=400&v=4'
+          }
+          ,
+          {
+            username: 'dav3rid',
+            name: 'dave',
+            avatar_url:
+              'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png'
+          }
+        ]);
+      });
+    })
+    // it('should return a 400 if the return is of an invalid type', () => {
+    //   return request (app)
+    //   .get('/api/users/46578')
+    //   .expect(400)
+    //   .then(({body}) => {
+    //     console.log(body)
+    //     expect(body.msg).toBe('ID is not valid (type is wrong)')
+    //   })
+    //})
+    it('should return a 404 if the return doesnt exist', () => {
+      return request(app)
+      .get('/api/users/999768767896876999')
+      .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe('ID does not exist')
+      })
+    })
+  });
+
+
+
 /*
 beforeEach: this returns the test data from the linked table
 */

@@ -16,6 +16,12 @@ exports.fetchReviewID = (id) => {
     })
 }
 
+exports.fetchUsers = () => {
+    return db.query(`SELECT * FROM users`)//sql
+    .then(({ rows }) => {                      //sql return handler
+        return rows;
+    })
+}
 
 
 
