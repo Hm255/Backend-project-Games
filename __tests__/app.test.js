@@ -11,6 +11,7 @@ beforeEach(()=>{
 
 afterAll(() => {
     db.end();
+
   });
 
   describe("GET/api/categories", () => {
@@ -26,6 +27,7 @@ afterAll(() => {
         });
     });
   });
+
 
 
   describe("GET/api/review/:review_id", () => {
@@ -61,8 +63,13 @@ afterAll(() => {
       .get('/api/reviews/999768767896876999')
       .expect(404)
       .then(({body}) => {
-        console.log(body.msg)
         expect(body.msg).toBe('ID does not exist')
       })
     })
   });
+
+
+/*
+beforeEach: this returns the test data from the linked table
+*/
+
