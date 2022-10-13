@@ -1,5 +1,12 @@
-const {fetchCategories} = require('../model/model')
+
+const express = require('express');
+const {fetchCategories, fetchReviewID} = require('../model/model')
 //handling sql queries and directing them to an output in the controller
+
+const app = express();
+
+
+
 
 
 
@@ -7,4 +14,21 @@ exports.getCategories = (req, res) => {      //takes category data defined in th
     fetchCategories().then((categories) => {
       res.status(200).send({categories});
     });
+
+
   };
+
+
+exports.getReviewID = (req, res, next) => {
+  const { review_id } = req.params
+  fetchReviewID(review_id)
+  .then((review) => {
+  res.status(200).send({review})
+  })
+  .catch((err)=>{
+    next(err);
+  })
+};
+
+  };
+
