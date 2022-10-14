@@ -1,6 +1,6 @@
 
 const express = require('express');
-const {fetchCategories, fetchReviewID, fetchUsers, editReview} = require('../model/model')
+const {fetchCategories, fetchReviewID, fetchUsers, editReview, fetchCommentCount} = require('../model/model')
 //handling sql queries and directing them to an output in the controller
 
 const app = express();
@@ -19,6 +19,7 @@ exports.getReviewID = (req, res, next) => {
   res.status(200).send({review})
   })
   .catch((err)=>{
+    
     next(err);
   })
 };
@@ -41,3 +42,4 @@ exports.newRev = (req, res, next) => {
     next(err);
   })
 };
+

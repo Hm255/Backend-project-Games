@@ -9,9 +9,11 @@ exports.fetchCategories = () => {
     })
 }
 
-exports.fetchReviewID = (id) => {
-    return db.query (`SELECT * FROM reviews where review_id = $1`, [id])
+exports.fetchReviewID = (review_id) => {
+    
+    return db.query(`SELECT reviews.*, COUNT(comments.body) ::INT AS comment_count FROM reviews LEFT JOIN comments ON reviews.review_id = comments.review_id WHERE reviews.review_id = $1 GROUP BY reviews.review_id`, [review_id])
     .then(({rows})=>{
+        
     return rows[0];  
     })
 }
@@ -31,7 +33,6 @@ exports.editReview = (inc_votes, review_id) => {
         return rows[0];
     })  
 }
-
 
 
 

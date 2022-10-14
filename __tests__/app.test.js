@@ -30,13 +30,14 @@ afterAll(() => {
 
 
 
-  describe("GET/api/review/:review_id", () => {
+  describe("GET/api/reviews/:review_id", () => {
     test("200: returns a result", () => {
       return request(app)
         .get('/api/reviews/1')
         .expect(200)
         .then(({body}) => {
-          expect(body.review).toEqual({
+          expect(body.review).toEqual(
+            expect.objectContaining({
             review_id: 1,
             title: 'Agricola',
             designer: 'Uwe Rosenberg',
@@ -47,7 +48,7 @@ afterAll(() => {
             category: 'euro game',
             created_at: ("2021-01-18T10:00:20.514Z"),
             votes: 1
-          });
+          }));
         });
     });
     it('should return a 400 if the return is of an invalid type', () => {
@@ -66,8 +67,52 @@ afterAll(() => {
         expect(body.msg).toBe('Item does not exist')
       })
     })
-  });
-
+    it('should return the comment count of a user without comments', () => {
+      const rev_ID = 1
+      return request(app)
+      .get(`/api/reviews/${rev_ID}`)
+      .expect(200)
+      .then(({body}) => {
+        
+        expect(body.review).toEqual({
+          review_id: 1,
+          comment_count: 0,
+          title: 'Agricola',
+          designer: 'Uwe Rosenberg',
+          owner: 'mallionaire',
+          review_img_url:
+            'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
+          review_body: 'Farmyard fun!',
+          category: 'euro game',
+          created_at: ("2021-01-18T10:00:20.514Z"),
+          votes: 1
+        });
+      })
+    })
+        it('should return the comment count of a user with comments', () => {
+          const rev_ID = 3
+          return request(app)
+          .get(`/api/reviews/${rev_ID}`)
+          .expect(200)
+          .then(({body}) => {
+           
+            expect(body.review).toEqual({
+              review_id: 3,
+              comment_count: 3,
+              title: 'Ultimate Werewolf',
+              designer: 'Akihisa Okui',
+              owner: 'bainesface',
+              review_img_url:
+              'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
+              review_body: "We couldn't find the werewolf!",
+              category: 'social deduction',
+              created_at: "2021-01-18T10:01:41.251Z",
+              votes: 5
+            });
+          });
+      });
+    });
+  
 
   describe("PATCH/api/review/:review_id", () => {
     test("200: item has been updated", () => {
@@ -113,7 +158,6 @@ afterAll(() => {
       .send(voteInc)
       .expect(404)
       .then(({body}) => {
-        console.log(body)
         expect(body.msg).toBe('Item does not exist' )
       })
      })
@@ -125,7 +169,6 @@ afterAll(() => {
       .send(voteInc)
       .expect(400)
       .then(({body}) => {
-        console.log(body)
         expect(body.msg).toBe("invalid type (type is wrong)")
       })
      })
@@ -179,3 +222,4 @@ afterAll(() => {
       });
     })
   })
+
