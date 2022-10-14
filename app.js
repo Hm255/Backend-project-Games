@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { getCategories, getReviewID, getUsers, newRev} = require("./controller/controller");
+const { getCategories, getReviewID, getUsers, newRev, commentCount} = require("./controller/controller");
 
 
 
@@ -11,6 +11,9 @@ app.get("/api/categories", getCategories);  //endpoint invoked with required in 
 
 
 app.get("/api/reviews/:review_id", getReviewID);
+app.get("/api/reviews/:review_id", (commentCount)=>{
+  return commentCount;
+});
 app.patch("/api/reviews/:review_id", newRev);
 
 
