@@ -55,7 +55,7 @@ afterAll(() => {
       .get('/api/reviews/buhbuvf')
       .expect(400)
       .then(({body}) => {
-        expect(body.msg).toBe('ID is not valid (type is wrong)')
+        expect(body.msg).toBe("invalid type (type is wrong)")
       })
     })
     it('should return a 404 if the return doesnt exist', () => {
@@ -63,7 +63,7 @@ afterAll(() => {
       .get('/api/reviews/999768767896876999')
       .expect(404)
       .then(({body}) => {
-        expect(body.msg).toBe('ID does not exist')
+        expect(body.msg).toBe('Item does not exist')
       })
     })
   });
@@ -102,7 +102,7 @@ afterAll(() => {
       .send(voteInc)
       .expect(400)
       .then(({body}) => {
-        expect(body.msg).toBe('ID is not valid (type is wrong)')
+        expect(body.msg).toBe("invalid type (type is wrong)")
       })
      })
      it('returns a 404 for using an ID that does not exist (out of range)', () => {
@@ -114,7 +114,31 @@ afterAll(() => {
       .expect(404)
       .then(({body}) => {
         console.log(body)
-        expect(body.msg).toBe('ID does not exist')
+        expect(body.msg).toBe('Item does not exist' )
+      })
+     })
+     it('returns a 400 for using a value in inc_votes that is the wrong type', () => {
+      const rev_ID = 1
+      const voteInc = { inc_votes : 'hi' }
+      return request(app)
+      .patch(`/api/reviews/${rev_ID}`)
+      .send(voteInc)
+      .expect(400)
+      .then(({body}) => {
+        console.log(body)
+        expect(body.msg).toBe("invalid type (type is wrong)")
+      })
+     })
+     it('returns a 404 for using a property that does not exist', () => {
+      const rev_ID = 1
+      const voteInc = { banana : 1 }
+      return request(app)
+      .patch(`/api/reviews/${rev_ID}`)
+      .send(voteInc)
+      .expect(404)
+      .then(({body}) => {
+        
+        expect(body.msg).toBe('Item does not exist' )
       })
      })
    })
