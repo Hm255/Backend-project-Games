@@ -19,7 +19,7 @@ exports.getReviewID = (req, res, next) => {
   res.status(200).send({review})
   })
   .catch((err)=>{
-    console.log(err, 'controller')
+    
     next(err);
   })
 };
@@ -43,10 +43,3 @@ exports.newRev = (req, res, next) => {
   })
 };
 
-// exports.fetchCommentCount = (req, res, next) => {
-//   const review_id = req.params
-//   fetchCommentCount(review_id)
-//   .then((comments) => {
-//     res.status(200).send({comments})
-//   })
-// }

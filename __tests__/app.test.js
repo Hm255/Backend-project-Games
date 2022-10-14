@@ -73,7 +73,7 @@ afterAll(() => {
       .get(`/api/reviews/${rev_ID}`)
       .expect(200)
       .then(({body}) => {
-        console.log(body.review)
+        
         expect(body.review).toEqual({
           review_id: 1,
           comment_count: 0,
@@ -95,7 +95,7 @@ afterAll(() => {
           .get(`/api/reviews/${rev_ID}`)
           .expect(200)
           .then(({body}) => {
-            console.log(body.review)
+           
             expect(body.review).toEqual({
               review_id: 3,
               comment_count: 3,
