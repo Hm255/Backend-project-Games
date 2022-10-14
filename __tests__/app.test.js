@@ -69,6 +69,56 @@ afterAll(() => {
   });
 
 
+  describe("PATCH/api/review/:review_id", () => {
+    test("200: item has been updated", () => {
+      const rev_ID = 3
+      const voteInc = { inc_votes : 1 }
+      return request(app)
+      .patch(`/api/reviews/${rev_ID}`)
+      .send(voteInc)
+      .expect(200)
+      .then(({body})=>{
+        const review = body.review
+        expect(review).toEqual( {
+          title: 'Ultimate Werewolf',
+          designer: 'Akihisa Okui',
+          owner: 'bainesface',
+          review_img_url:
+            'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
+          review_body: "We couldn't find the werewolf!",
+          review_id: 3,
+          category: 'social deduction',
+          created_at: '2021-01-18T10:01:41.251Z',
+          votes: 6
+        })
+      })
+    })
+     
+      it('returns a 400 for incrementing with wrong type(String instead of number)', () => {
+      const rev_ID = 'haha'
+      const voteInc = { inc_votes : 1 }
+      return request(app)
+      .patch(`/api/reviews/${rev_ID}`)
+      .send(voteInc)
+      .expect(400)
+      .then(({body}) => {
+        expect(body.msg).toBe('ID is not valid (type is wrong)')
+      })
+     })
+     it('returns a 404 for using an ID that does not exist (out of range)', () => {
+      const rev_ID = 74358963928569576
+      const voteInc = { inc_votes : 1 }
+      return request(app)
+      .patch(`/api/reviews/${rev_ID}`)
+      .send(voteInc)
+      .expect(404)
+      .then(({body}) => {
+        console.log(body)
+        expect(body.msg).toBe('ID does not exist')
+      })
+     })
+   })
+      
   describe("GET/api/users", () => {
     it('should return all users details as shown', () => {
       return request (app)
