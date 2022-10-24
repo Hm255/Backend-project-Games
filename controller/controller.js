@@ -1,6 +1,6 @@
 
 const express = require('express');
-const {fetchCategories, fetchReviewID, fetchUsers, editReview, fetchCommentCount} = require('../model/model')
+const {fetchCategories, fetchReviewID, fetchUsers, editReview, fetchReviews, fetchCommentbyReviewID} = require('../model/model')
 //handling sql queries and directing them to an output in the controller
 
 const app = express();
@@ -14,9 +14,9 @@ exports.getCategories = (req, res) => {      //takes category data defined in th
 
 exports.getReviewID = (req, res, next) => {
   const { review_id } = req.params
-  fetchReviewID(review_id)
+  return fetchReviewID(review_id)
   .then((review) => {
-  res.status(200).send({review})
+  return res.status(200).send({review})
   })
   .catch((err)=>{
     
@@ -43,3 +43,19 @@ exports.newRev = (req, res, next) => {
   })
 };
 
+exports.getReviews = (req, res, next) => {
+  return fetchReviews()
+  .then((reviews) => {
+    return res.status(200).send({reviews});
+  })
+  .catch(next);
+}
+exports.getCommentByReviewId = (req, res, next) => {
+  const {review_id} = req.params
+  console.log(req.params)
+  return fetchCommentbyReviewID(review_id)
+  .then((comment) => {
+    return res.status(200).send({comment});
+  })
+  .catch(next);
+} 

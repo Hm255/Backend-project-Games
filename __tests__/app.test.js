@@ -3,7 +3,8 @@ const testData = require('../db/data/test-data')
 const request = require("supertest");
 const db = require("../db/connection");
 const seed = require('../db/seeds/seed');
-const {expect} = require('@jest/globals') 
+const {expect} = require('@jest/globals'); 
+const comments = require("../db/data/test-data/comments");
 
 beforeEach(()=>{
   return seed(testData)
@@ -29,6 +30,68 @@ afterAll(() => {
   });
 
 
+  describe("GET/api/reviews", () => {
+    test("200: return reviews array", () => {
+      return request(app)
+        .get('/api/reviews')
+        .expect(200)
+        .then(({ body: {reviews} }) => {
+          expect(reviews).toHaveLength(13);
+          expect(reviews.forEach((review)=>{
+            expect(review).toEqual(expect.objectContaining({owner: expect.any(String), title: expect.any(String), review_id: expect.any(Number), category: expect.any(String), review_img_url: expect.any(String), created_at: expect.any(String), votes: expect.any(Number), designer: expect.any(String), review_body: expect.any(String), comment_count: expect.any(Number)}))
+          }))
+          expect(reviews).toBeSortedBy('created_at', {descending: true})
+        });
+    });
+  });
+
+
+
+  describe('GET /api/reviews/:review_id/comments', () => {
+test('200: returns the comments of the given review', () => {
+return request(app)
+.get('/api/reviews/2/comments')
+.expect(200)
+.then(({body})=>{
+  const comment = body.comment
+  expect(comment.forEach((comment)=> {
+    expect(comment).toEqual(expect.objectContaining({
+      comment_id: expect.any(Number),
+      body: expect.any(String),
+      votes: expect.any(Number),
+      author: expect.any(String),
+      review_id: 2,
+      created_at: expect.any(String)
+    }));
+  }))
+});
+});
+});
+
+
+describe('POST /api/reviews/:review_id/comments', () => {
+  const review_id = 2
+  const comment = {
+    username: 'mallionaire',
+    body: 'my comment to mallionaire'
+  }
+  test('201: returns the posted comment', () => {
+  return request(app)
+  .post(`/api/reviews/${review_id}/comments`)
+  .expect(201)
+  .send()
+  .then(({body})=>{
+    expect(body.comment).toEqual(expect.objectContaining({
+      comment_id: expect.any(Number),
+      body: comment.body,
+      votes: expect.any(Number),
+      author: comment.username,
+      review_id: review_id,
+      created_at: expect.any(String)
+    }));
+  });
+  });
+  });
 
   describe("GET/api/reviews/:review_id", () => {
     test("200: returns a result", () => {
@@ -51,6 +114,7 @@ afterAll(() => {
           }));
         });
     });
+    
     it('should return a 400 if the return is of an invalid type', () => {
       return request (app)
       .get('/api/reviews/buhbuvf')

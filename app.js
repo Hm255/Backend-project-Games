@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { getCategories, getReviewID, getUsers, newRev, commentCount} = require("./controller/controller");
+const { getCategories, getReviewID, getUsers, newRev, getReviews, getCommentByReviewId} = require("./controller/controller");
 
 
 
@@ -14,9 +14,11 @@ app.get("/api/reviews/:review_id", getReviewID);
 app.get("/api/reviews/:review_id", (commentCount)=>{
   return commentCount;
 });
+
+app.get("/api/reviews", getReviews)
 app.patch("/api/reviews/:review_id", newRev);
 
-
+app.get("/api/reviews/:review_id/comments", getCommentByReviewId)
 app.get("/api/users", getUsers);
 
 app.all('/*', (req, res) => {
