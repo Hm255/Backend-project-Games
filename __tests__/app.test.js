@@ -79,9 +79,10 @@ describe('POST /api/reviews/:review_id/comments', () => {
   return request(app)
   .post(`/api/reviews/${review_id}/comments`)
   .expect(201)
-  .send()
-  .then(({body})=>{
-    expect(body.comment).toEqual(expect.objectContaining({
+  .send(comment)
+  .then((body)=>{
+    console.log(body.body.review);
+    expect(body.body.review).toEqual(expect.objectContaining({
       comment_id: expect.any(Number),
       body: comment.body,
       votes: expect.any(Number),
@@ -91,7 +92,15 @@ describe('POST /api/reviews/:review_id/comments', () => {
     }));
   });
   });
+  it('should return a 404 if the return doesnt exist', () => {
+    return request(app)
+    .post('/api/reviews/999768767896876999')
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe('Item does not exist')
+    })
   });
+})
 
   describe("GET/api/reviews/:review_id", () => {
     test("200: returns a result", () => {
