@@ -65,5 +65,7 @@ exports.fetchCommentbyReviewID = (review_id) => {
     })
 }
 
-
+exports.postCommentByReviewID = (review_id) => {
+    return db.query(`INSERT into comments.* WHERE comments.review_id=$1`, [review_id])
+}
 

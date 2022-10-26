@@ -1,6 +1,7 @@
 
 const express = require('express');
-const {fetchCategories, fetchReviewID, fetchUsers, editReview, fetchReviews, fetchCommentbyReviewID} = require('../model/model')
+const { post } = require('../app');
+const {fetchCategories, fetchReviewID, fetchUsers, editReview, fetchReviews, fetchCommentbyReviewID, postCommentByReviewID} = require('../model/model')
 //handling sql queries and directing them to an output in the controller
 
 const app = express();
@@ -23,6 +24,22 @@ exports.getReviewID = (req, res, next) => {
     next(err);
   })
 };
+
+exports.newCommentByReviewID = (req, res, next) => {
+  const { review_id } = req.params
+  return postCommentByReviewID(review_id)
+  .then((review) => {
+  return res.status(201).send({review})
+  })
+  .catch((err)=>{
+    
+    next(err);
+  })
+};
+
+
+
+
 
 exports.getUsers = (req, res) => {      
   fetchUsers().then((users) => {
@@ -59,3 +76,4 @@ exports.getCommentByReviewId = (req, res, next) => {
   })
   .catch(next);
 } 
+
