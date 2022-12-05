@@ -16,6 +16,9 @@ app.get("/api/reviews/:review_id", (commentCount)=>{
 });
 
 app.get("/api/reviews", getReviews)
+
+
+
 app.patch("/api/reviews/:review_id", newRev);
 
 app.get("/api/reviews/:review_id/comments", getCommentByReviewId)

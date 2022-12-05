@@ -45,7 +45,43 @@ afterAll(() => {
     });
   });
 
-
+  describe("GET/api/reviews", () => {
+    test("200: return filtered reviews array", () => {
+      return request(app)
+        .get('/api/reviews')
+        .expect(200)
+        .then(({ body: {reviews} }) => {
+          expect(reviews).toHaveLength(13);
+          expect(reviews.forEach((review)=>{
+            expect(review).toEqual(expect.objectContaining({owner: expect.any(String), title: expect.any(String), review_id: expect.any(Number), category: expect.any(String), review_img_url: expect.any(String), created_at: expect.any(String), votes: expect.any(Number), designer: expect.any(String), review_body: expect.any(String), comment_count: expect.any(Number)}))
+          }))
+          expect(reviews).toBeSortedBy('created_at', {descending: true})
+        });
+    });
+    test("200: return a different filtered reviews array", () => {
+      return request(app)
+        .get('/api/reviews?sortedBy=review_id&orderedBy=asc')
+        .expect(200)
+        .then(({ body: {reviews} }) => {
+          expect(reviews).toHaveLength(13);
+          expect(reviews.forEach((review)=>{
+            expect(review).toEqual(expect.objectContaining({owner: expect.any(String), title: expect.any(String), review_id: expect.any(Number), category: expect.any(String), review_img_url: expect.any(String), created_at: expect.any(String), votes: expect.any(Number), designer: expect.any(String), review_body: expect.any(String), comment_count: expect.any(Number)}))
+          }))
+          expect(reviews).toBeSortedBy('review_id', {descending: false})
+        });
+    });
+    test("200: return reviews array filtered by category", () => {
+      return request(app)
+        .get('/api/reviews?category=dexterity')//? stands for query which stands for a keys value
+        .expect(200)
+        .then(({ body: {reviews} }) => {
+          expect(reviews).toHaveLength(1);
+          expect(reviews.forEach((review)=>{
+            expect(review).toEqual(expect.objectContaining({owner: expect.any(String), title: expect.any(String), review_id: expect.any(Number), category: "dexterity", review_img_url: expect.any(String), created_at: expect.any(String), votes: expect.any(Number), designer: expect.any(String), review_body: expect.any(String), comment_count: expect.any(Number)}))
+          }))
+        });
+    });
+  });
 
   describe('GET /api/reviews/:review_id/comments', () => {
 test('200: returns the comments of the given review', () => {
@@ -81,7 +117,6 @@ describe('POST /api/reviews/:review_id/comments', () => {
   .expect(201)
   .send(comment)
   .then((body)=>{
-    console.log(body.body.review);
     expect(body.body.review).toEqual(expect.objectContaining({
       comment_id: expect.any(Number),
       body: comment.body,

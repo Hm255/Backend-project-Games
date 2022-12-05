@@ -1,5 +1,6 @@
 
 const express = require('express');
+const { sort } = require('../db/data/test-data/categories');
 
 const {fetchCategories, fetchReviewID, fetchUsers, editReview, fetchReviews, fetchCommentbyReviewID, postCommentByReviewID} = require('../model/model')
 //handling sql queries and directing them to an output in the controller
@@ -30,7 +31,6 @@ exports.newCommentByReviewID = (req, res, next) => {
   const comment = req.body 
    postCommentByReviewID(comment, review_id)
   .then((review) => {
-    console.log(review[0]);
   return res.status(201).send({review: review[0]})
   })
   .catch((err)=>{
@@ -60,12 +60,15 @@ exports.newRev = (req, res, next) => {
 };
 
 exports.getReviews = (req, res, next) => {
-  return fetchReviews()
+  const {sortedBy, orderedBy, category} = req.query
+  console.log(category);
+  return fetchReviews(sortedBy, orderedBy, category)
   .then((reviews) => {
     return res.status(200).send({reviews});
   })
   .catch(next);
 }
+
 exports.getCommentByReviewId = (req, res, next) => {
   const {review_id} = req.params
   

@@ -48,14 +48,33 @@ exports.fetchComments = (review_id) => {
     })
 }
 
-exports.fetchReviews = () => {
-    return db.query(`SELECT reviews.*, COUNT(comments.comment_id) ::INT AS comment_count FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id 
-    GROUP BY reviews.review_id
-    ORDER BY reviews.created_at DESC`)
-    .then(({rows}) => {
+exports.fetchReviews = (sortedBy = "created_at", orderedBy = "desc", category) => {
+    let queryStr = `SELECT reviews.*, COUNT(comments.comment_id) ::INT AS comment_count FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id`
 
-        return rows;
-    })
+    if(category){
+        queryStr += ` WHERE reviews.category = $1 
+        GROUP BY reviews.review_id 
+        ORDER BY ${sortedBy} ${orderedBy}`;
+        console.log(queryStr)
+        return db.query(queryStr, [category])
+        .then(({rows}) => {
+            console.log(rows)
+            return rows;
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+    else{
+        return db.query(`SELECT reviews.*, COUNT(comments.comment_id) ::INT AS comment_count FROM reviews LEFT JOIN comments ON comments.review_id = reviews.review_id 
+        GROUP BY reviews.review_id
+        ORDER BY ${sortedBy} ${orderedBy}`)// << will be sorted BY sortedBy(given review property) and orderedBy asc/desc
+        .then(({rows}) => {
+            console.log(rows)
+            return rows;
+        })
+    }
+
+   
 }
 
 exports.fetchCommentbyReviewID = (review_id) => {
@@ -66,10 +85,9 @@ exports.fetchCommentbyReviewID = (review_id) => {
 }
 
 exports.postCommentByReviewID = (comment, review_id) => {
-    console.log(comment, review_id)
     return db.query(`INSERT into comments (author, body, review_id) VALUES ($1, $2, $3) RETURNING *`, [comment.username, comment.body, review_id])
     .then(({rows})=> {
-        console.log(rows);
+        
         return rows;
     })
 }
